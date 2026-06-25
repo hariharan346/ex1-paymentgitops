@@ -8,7 +8,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/<YOUR_GITHUB_USERNAME>/payment-gitops.git
+    repoURL: https://github.com/hariharan346/ex1-paymentgitops.git
     targetRevision: main
     path: payment-service
 
