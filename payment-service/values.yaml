@@ -9,7 +9,7 @@ replicaCount: 1
 image:
   image:
   repository: 660201001952.dkr.ecr.ap-south-1.amazonaws.com/payment-service
-  tag: a2fe5fbc78afb3ed84eddc6836f4a192cd09cefa
+  tag: v2
   pullPolicy: Always
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
