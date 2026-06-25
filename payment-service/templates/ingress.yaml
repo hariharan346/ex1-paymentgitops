@@ -1,43 +1,21 @@
-{{- if .Values.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "payment-service.fullname" . }}
-  labels:
-    {{- include "payment-service.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  name: payment-service
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /health
 spec:
-  {{- with .Values.ingress.className }}
-  ingressClassName: {{ . }}
-  {{- end }}
-  {{- if .Values.ingress.tls }}
-  tls:
-    {{- range .Values.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
+  ingressClassName: alb
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
-            backend:
-              service:
-                name: {{ include "payment-service.fullname" $ }}
-                port:
-                  number: {{ $.Values.service.port }}
-          {{- end }}
-    {{- end }}
-{{- end }}
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: payment-service
+            port:
+              number: 3000
